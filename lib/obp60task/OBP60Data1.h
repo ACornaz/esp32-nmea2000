@@ -4,13 +4,15 @@
 #include <Arduino.h>
 
 typedef struct{
-  char title[12];     // name of measurement AWA etc
+  char title[12];     // name of measurement: AWA etc
   float fvalue;       // float value of measurement
   char svalue[16];    // char value
   char unit[8];       // char Unit
-  bool valid;         // valid flag
+  bool valid;         // valid flag for new value
   bool primary;       // primary = true, Data in GwApi::BoatValue, 
-                      // primary = false Data must be calculated
+                      // primary = false, Data must be calculated with other values
+  bool longValue;     // longValue=true: 24° 20.500' N    130° 04.333' E  max 14 characters
+                      // longValue=false 2.3 m or 17.4 kn 187 deg  max 4 characters 
 } dataContainer;
 
 typedef struct{

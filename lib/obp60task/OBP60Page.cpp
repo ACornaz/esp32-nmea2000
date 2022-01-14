@@ -109,7 +109,7 @@ struct pageNode*  pageList::deleteActualPos(struct pageNode *actPage)
    return ptr;
 }
 
-
+/*
 // dynamic memory allocation for subPageNode
 
 subPageNode* subPageList::createSubNode(String title, String unit, float mean, float * val)
@@ -164,6 +164,9 @@ subPageNode* subPageList::createSubNode(String title, String unit, dataContainer
 
 }
 
+*/
+
+// dynamic memory allocation for subPageNode
 subPageNode* subPageList::createSubNode(String title, dataContainer * containerPtr)
 {   
    counter++;  
@@ -183,6 +186,7 @@ subPageNode* subPageList::createSubNode(String title, dataContainer * containerP
 
 }
 
+/*
 // inserts element at beginning 
 subPageNode* subPageList::insertBegin(String title, String unit, float mean, float * val)
 {
@@ -276,7 +280,9 @@ subPageNode*  subPageList::insertLast(String title, String unit, dataContainer *
    }
    return temp;
 }
+*/
 
+// inserts element at last 
 subPageNode*  subPageList::insertLast(String title, dataContainer * containerPtr)
 {
    
@@ -300,6 +306,7 @@ subPageNode*  subPageList::insertLast(String title, dataContainer * containerPtr
    return temp;
 }
 
+/*
 // inserts element at position, not up to date
 void subPageList::insertPos(String title, String unit, float mean, float * val)
 {    
@@ -343,6 +350,7 @@ void subPageList::insertPos(String title, String unit, float mean, float * val)
       }
    }
 }
+*/
 
 String unit(String pageTile)  // unit doppelt definiert auch in Data !!!!!!!
 {

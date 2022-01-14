@@ -132,6 +132,45 @@ void initBusInfo(busData *bInfo)
   strcpy(bInfo->WaterDepth.unit,"m");
   strcpy(bInfo->WaterTemperature.unit,"C");
   strcpy(bInfo->XTE.unit,"nm");
+
+// longValue
+  bInfo->AWA.longValue=false;
+  bInfo->AWD.longValue=false;
+  bInfo->AWS.longValue=false;
+  bInfo->Altitude.longValue=false;
+  bInfo->BTW.longValue=false;
+  bInfo->COG.longValue=false;
+  bInfo->DTW.longValue=false;
+  bInfo->Date.longValue=true;
+  bInfo->DepthTransducer.longValue=false;
+  bInfo->Deviation.longValue=false;
+  bInfo->HDOP.longValue=false;
+  bInfo->Heading.longValue=false;
+  bInfo->Latitude.longValue=true;
+  bInfo->Log.longValue=false;
+  bInfo->Longitude.longValue=true;
+  bInfo->MagneticHeading.longValue=false;
+  bInfo->MaxAWS.longValue=false;
+  bInfo->MaxTWS.longValue=false;
+  bInfo->PDOP.longValue=false;
+  bInfo->ROT.longValue=false;
+  bInfo->RudderPosition.longValue=false;
+  bInfo->SOG.longValue=false;
+  bInfo->STW.longValue=false;
+  bInfo->SatInfo.longValue=false;
+  bInfo->Time.longValue=true;
+  bInfo->TWA.longValue=false;
+  bInfo->TWD.longValue=false;
+  bInfo->TWS.longValue=false;
+  bInfo->Timezone.longValue=false;
+  bInfo->TripLog.longValue=false;
+  bInfo->VDOP.longValue=false;
+  bInfo->Variation.longValue=false;
+  bInfo->WPLatitude.longValue=false;
+  bInfo->WPLongitude.longValue=false;
+  bInfo->WaterDepth.longValue=false;
+  bInfo->WaterTemperature.longValue=false;
+  bInfo->XTE.longValue=false;
 }
 
 float* valuePtr(busData *bInfo, String pageTile)

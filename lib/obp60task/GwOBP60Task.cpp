@@ -245,8 +245,10 @@ void OBP60Task(void *param){
     GwApi::Status status;
 
     bool hasPosition = false;
-   
-    // Get configuration data from webside
+    
+    // initalize default configuration data
+    initBusInfo(&busInfo);
+    // Get configuration data from webside overwrite default
     // OBP60 Settings
     bool exampleSwitch = api->getConfig()->getConfigItem(api->getConfig()->obp60Config,true)->asBoolean();
     LOG_DEBUG(GwLog::DEBUG,"example switch ist %s",exampleSwitch?"true":"false");
@@ -281,7 +283,7 @@ void OBP60Task(void *param){
     // OBP60 Pages
     busInfo.numpages = api->getConfig()->getConfigItem(api->getConfig()->numberPages,true)->asInt();
 
-    initBusInfo(&busInfo);
+    
 
 /////////////////////////////////
 // OBP60 Page Adrien
@@ -635,6 +637,7 @@ void OBP60Task(void *param){
 
     //awa value in rad
         busInfo.AWA.fvalue = rad2deg( awa->value);
+        if(busInfo.AWA.fvalue > 180.0) busInfo.AWA.fvalue = busInfo.AWA.fvalue - 360.0;
         sprintf(busInfo.AWA.svalue , "%4.0f", busInfo.AWA.fvalue);
         busInfo.AWA.valid = int(awa->valid);
     

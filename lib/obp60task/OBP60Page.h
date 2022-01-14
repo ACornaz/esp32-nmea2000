@@ -70,16 +70,16 @@ class subPageList
    public:
       int counter = 0; 
       subPageNode *start, *last; 
-      subPageNode *createSubNode(String title, String unit, float mean, float * val);
-      subPageNode *createSubNode(String title, String unit, float mean, char * val, bool * validPtr);
-      subPageNode *createSubNode(String title, String unit, dataContainer * containerPtr);
+     // subPageNode *createSubNode(String title, String unit, float mean, float * val);
+     // subPageNode *createSubNode(String title, String unit, float mean, char * val, bool * validPtr);
+     // subPageNode *createSubNode(String title, String unit, dataContainer * containerPtr);
       subPageNode *createSubNode(String title, dataContainer * containerPtr);
-      subPageNode *insertBegin(String title, String unit, float mean, float * val);
-      subPageNode *insertLast(String title, String unit, float mean, float * val);
-      subPageNode *insertLast(String title, String unit, float mean, char * val, bool * validPtr);
-      subPageNode *insertLast(String title,  String unit, dataContainer * containerPtr);
+     // subPageNode *insertBegin(String title, String unit, float mean, float * val);
+     // subPageNode *insertLast(String title, String unit, float mean, float * val);
+     // subPageNode *insertLast(String title, String unit, float mean, char * val, bool * validPtr);
+     // subPageNode *insertLast(String title,  String unit, dataContainer * containerPtr);
       subPageNode *insertLast(String title, dataContainer * containerPtr);
-      void insertPos(String title, String unit, float mean, float * val);
+     // void insertPos(String title, String unit, float mean, float * val);
       subPageList()
       {
          counter = 0; 

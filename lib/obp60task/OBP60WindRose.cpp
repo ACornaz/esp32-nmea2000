@@ -74,7 +74,7 @@ void printWindCornerInfo(busData *bInfo,int i)
  
   // measurements
   display.setFont(&DSEG7Classic_BoldItalic16pt7b);
-  display.setCursor(0+k*320, 80+l*160);
+  display.setCursor(0+k*300, 80+l*160);
   if(dC->valid == true){     // Check vor valid real data
       display.print(dC->svalue);
   }
