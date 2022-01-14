@@ -47,7 +47,7 @@ class TopMargin
 
 };
 
-void pageUpdate(busData *bInfo);
+void pageUpdate(busData *bInfo, bool firstView);
 void buttomStatusLine();
 void print1tile(busData *bInfo);   // page with 1 tile
 void print2tiles(busData *bInfo);  // page with 2 tiles

@@ -123,14 +123,9 @@ void TopMargin::print(busData *bInfo)
   }
 }
 
-void pageUpdate(busData *bInfo)
+void pageUpdate(busData *bInfo,bool firstView)
 {
-  uint16_t box_x = 0;
-  uint16_t box_y = 0;
-  uint16_t box_w = 399;
-  uint16_t box_h = 299;
-
-  display.fillRect(box_x, box_y, box_w, box_h, GxEPD_WHITE);
+    display.fillRect(0, 0, GxEPD_WIDTH, GxEPD_HEIGHT, GxEPD_WHITE);   // Draw white sreen
   switch (actualPage->numbTiles)
   {
     case 1:
@@ -154,8 +149,19 @@ void pageUpdate(busData *bInfo)
     default:
     ;        
   } 
- // timeBefore1=millis();
-  display.updateWindow(box_x, box_y, box_w, box_h, true); 
+  // Update display
+  if(bInfo->refresh == true){
+    if(firstView == true){
+      display.updateWindow(0, 0, GxEPD_WIDTH, GxEPD_HEIGHT, true);    // Needs partial update before full update to refresh the frame buffer
+      display.update(); // Full update
+    }
+    else{
+      display.updateWindow(0, 0, GxEPD_WIDTH, GxEPD_HEIGHT, true);    // Partial update (fast)
+    }
+  }  
+  else{
+    display.updateWindow(0, 0, GxEPD_WIDTH, GxEPD_HEIGHT, true);    // Partial update (fast)
+  }
 }
 
 void buttomStatusLine()

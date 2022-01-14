@@ -5960,6 +5960,5 @@ const GFXfont Seven_Segment80pt7b PROGMEM = {
   (uint8_t  *)Seven_Segment80pt7bBitmaps,
   (GFXglyph *)Seven_Segment80pt7bGlyphs,
   0x20, 0x7E, 163 };
-
-// Approx. 70952 bytes
 #endif
+// Approx. 70952 bytes

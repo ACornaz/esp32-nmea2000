@@ -3,58 +3,69 @@
 
 void initBusInfo(busData *bInfo)
 {
-  // Gateway status infos
-  bInfo->wifiApOn = false;
-  bInfo->wifiClientOn = false;
-  bInfo->wifiClientConnected = false;
-  bInfo->wifiApIp = "";
-  bInfo->systemName = "";     // is also AP SSID
-  bInfo->wifiApPass = "";
-  bInfo->wifiClientIp = "";
-  bInfo->wifiClientSSID = "";
-  bInfo->usbRx = 0;
-  bInfo->usbTx = 0;
-  bInfo->serRx = 0;
-  bInfo->serTx = 0;
-  bInfo->tcpSerRx = 0;
-  bInfo->tcpSerTx = 0;
-  bInfo->tcpClients = 0;
-  bInfo->tcpClRx = 0;
-  bInfo->tcpClTx = 0;
-  bInfo->tcpClientConnected = false;
-  bInfo->n2kRx = 0;
-  bInfo->n2kTx = 0; 
+    // Gateway status infos
+  bInfo->wifiApOn = false;                    // Status access point [on|off]
+  bInfo->wifiClientConnected = false;         // Client connected [yes|no]
+  bInfo->usbRx = 0;                  // USB receive traffic
+  bInfo->usbTx = 0;                  // USB send traffic
+  bInfo->serRx = 0;                  // MNEA0183 serial receive traffic
+  bInfo->serTx = 0;                  // NMEA0183 serial send traffic
+  bInfo->tcpSerRx = 0;               // MNEA0183 TCP server receive traffic
+  bInfo->tcpSerTx = 0;               // MNEA0183 TCP server send traffic
+  bInfo->tcpClients = 0;                       // Number of connected TCP clients
+  bInfo->tcpClRx = 0;                // MNEA0183 TCP client receive traffic
+  bInfo->tcpClTx = 0;                // MNEA0183 TCP client send traffic
+  bInfo->tcpClientConnected = false;          // Connected TCP clients
+  bInfo->n2kRx = 0;                  // NMEA2000 CAN receive traffic
+  bInfo->n2kTx = 0;                  // NMEA2000 CAN send traffic
+  // System Settings
+  strcpy(bInfo->systemname,"");                 // System name show on web page and mDNS name
+  strcpy(bInfo->wifissid, "");                   // WiFi access point SSID
+  strcpy(bInfo->wifipass, "");                   // WiFi access point password
+  bInfo->useadminpass = false;                // Use admin password [on|off]
+  strcpy(bInfo->adminpassword, "");              // Admin password
+  strcpy(bInfo->loglevel, "");                   // Loglevel [off|error|log|debug]
+  // WiFi client settings
+  bInfo->wificlienton = false;                // Is WiFi client on [on|off]
+  strcpy(bInfo->wificlientssid, "");             // Wifi client SSID
+  strcpy(bInfo->wificlientpass, "");             // Wifi client password
   // OBP60 Settings
-  strcpy(bInfo->dateformat,"GB");  
-  bInfo->timezone = 0;
-  bInfo->draft = 0;
-  bInfo->fueltank = 0;
-  bInfo->fuelconsumption = 0;
-  bInfo->watertank = 0;
-  bInfo->wastetank = 0;
-  bInfo->batvoltage = 0;
-  strcpy(bInfo->battype, "Pb");
-  bInfo->batcapacity = 0;
+  strcpy(bInfo->lengthformat, "");               // Length format [m|ft]
+  strcpy(bInfo->distanceformat, "");             // Distance format [m|km|nm]
+  strcpy(bInfo->speedformat, "");                // Speed format [m/s|km/h|kn]
+  strcpy(bInfo->windspeedformat, "");            // Speed format [m/s|km/h|kn|bft]
+  strcpy(bInfo->tempformat, "");                 // Temperature format [K|C|F]
+  strcpy(bInfo->dateformat, "");                  // Date format for status line [DE|GB|US]
+  bInfo->timezone = 0;                         // Time zone [-12...+12]
+  bInfo->draft = 0;                          // Boat draft up to keel [m]
+  bInfo->fueltank = 0;                       // Fuel tank capacity [0...10m]
+  bInfo->fuelconsumption = 0;                // Fuel consumption [0...1000l/min]
+  bInfo->watertank = 0;                      // Water tank kapacity [0...5000l]
+  bInfo->wastetank = 0;                      // Waste tank kapacity [0...5000l]
+  bInfo->batvoltage = 0;                     // Battery voltage [0...1000V]
+  strcpy(bInfo->battype, "");                    // Battery type [Pb|Gel|AGM|LiFePo4]
+  bInfo->batcapacity = 0;                    // Battery capacity [0...10000Ah]
   // OBP60 Hardware
-  bInfo->gps = false;
-  bInfo->bme280 = false;
-  bInfo->onewire = false;
-  strcpy(bInfo->powermode, "Max Power");
-  bInfo->simulation = false;
+  bInfo->gps = false;                         // Internal GPS [on|off]
+  bInfo->bme280 = false;                      // Internat BME280 [on|off]
+  bInfo->onewire = false;                     // Internal 1Wire bus [on|off]
+  strcpy(bInfo->powermode, "");                  // Power mode [Max Power|Only 3.3V|Only 5.0V|Min Power]
+  bInfo->simulation = false;                  // Simulation data [on|off]
   // OBP60 Display
-  strcpy(bInfo->displaymode, "Logo + QR Code");
-  bInfo->statusline = true;
-  bInfo->refresh = false;
-  strcpy(bInfo->backlight, "Control by Key");
-  strcpy(bInfo->flashled, "Off");
+  strcpy(bInfo->displaymode, "");                // Dislpay mode [White Screen|Logo|Logo + QR Code|Off]
+  bInfo->statusline = true;                   // Show status line [on|off]
+  bInfo->refresh = false;                     // Refresh display after select a new page [on|off]
+  bInfo->holdvalues = false;                  // Hold values on missing data stream [on|off]
+  strcpy(bInfo->backlight, "");                  // Backlight mode [Off|Control by Sun|Control by Bus|Control by Time|Control by Key|On]
+  strcpy(bInfo->flashled, "");                   // Flash LED mode [Off|Bus Data|GPX Fix|Limits Overrun]
   // OBP60 Buzzer
-  bInfo->buzerror = false;
-  bInfo->buzgps = false;
-  bInfo->buzlimits = false;
-  strcpy(bInfo->buzmode, "Off");
-  bInfo->buzpower = 0;
+  bInfo->buzerror = false;                    // Buzzer error [on|off]
+  bInfo->buzgps = false;                      // Buzzer by GPS error [on|off]
+  bInfo->buzlimits = false;                   // Buzzer by limit underruns and overruns [on|off]
+  strcpy(bInfo->buzmode, "");                    // Buzzer mode [Off|Short Single Beep|Lond Single Beep|Beep until Confirmation]
+  bInfo->buzpower = 0;                         // Buzzer power [0...100%]
   // OBP60 Pages
-  bInfo->numpages = 1;
+  bInfo->numpages = 1;                         // Numper of listed pages
   // title
   strcpy(bInfo->AWA.title,"AWA");
   strcpy(bInfo->AWD.title,"AWD");
@@ -311,4 +322,14 @@ dataContainer* dataContPtr(busData *bInfo, String pageTile)
   if(pageTile == "WaterTemp") return &bInfo->WaterDepth;
 
   return  &bInfo->AWA;
+}
+
+void printSvalue(dataContainer * dc)
+{
+  if(dc->fvalue<0.0)
+  {
+    if(dc->fvalue<10)
+      sprintf(dc->svalue , "  %4.0f", dc->fvalue);
+  }
+  
 }

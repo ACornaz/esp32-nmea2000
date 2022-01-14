@@ -1,6 +1,5 @@
 #ifndef _DSEG7Classic_BoldItalic60pt7b_H
 #define _DSEG7Classic_BoldItalic60pt7b_H
-
 const uint8_t DSEG7Classic_BoldItalic60pt7bBitmaps[] PROGMEM = {
   0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
   0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x01, 0xFE, 0x00, 0x00, 0x03, 0xFC,
@@ -5893,6 +5892,5 @@ const GFXfont DSEG7Classic_BoldItalic60pt7b PROGMEM = {
   (uint8_t  *)DSEG7Classic_BoldItalic60pt7bBitmaps,
   (GFXglyph *)DSEG7Classic_BoldItalic60pt7bGlyphs,
   0x20, 0x7E, 129 };
-
-// Approx. 70135 bytes
 #endif
+// Approx. 70135 bytes

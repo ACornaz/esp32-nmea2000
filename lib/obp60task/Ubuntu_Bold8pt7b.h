@@ -180,6 +180,5 @@ const GFXfont Ubuntu_Bold8pt7b PROGMEM = {
   (uint8_t  *)Ubuntu_Bold8pt7bBitmaps,
   (GFXglyph *)Ubuntu_Bold8pt7bGlyphs,
   0x20, 0x7E, 18 };
-
-// Approx. 1595 bytes
 #endif
+// Approx. 1595 bytes

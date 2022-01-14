@@ -3,8 +3,10 @@
 
 #include <Arduino.h>
 #include "qrcode.h"
-  
-void qrWiFi(){
+#include "OBP60Data1.h"
+extern busData values;
+
+void qrWiFi(busData values){
   // Set start point and pixel size
   int16_t box_x = 100;      // X offset
   int16_t box_y = 30;       // Y offset
@@ -14,8 +16,10 @@ void qrWiFi(){
   // Create the QR code
   QRCode qrcode;
   uint8_t qrcodeData[qrcode_getBufferSize(4)];
-  
-  qrcode_initText(&qrcode, qrcodeData, 4, 0, "WIFI:S:OBP60;T:WPA;P:esp32nmea2k;;");
+  // Content for QR code: "WIFI:S:mySSID;T:WPA;P:myPASSWORD;;"
+  String text = "WIFI:S:" + String(values.systemname) + ";T:WPA;P:" + String(values.wifipass) + ";;";
+  const char *qrcodecontent = text.c_str();
+  qrcode_initText(&qrcode, qrcodeData, 4, 0, qrcodecontent);
 
   // Top quiet zone
   for (uint8_t y = 0; y < qrcode.size; y++) {
@@ -35,8 +39,12 @@ void qrWiFi(){
   display.setTextColor(GxEPD_BLACK);
   display.setCursor(140, 285);
   display.print("WiFi");
-  display.updateWindow(0, 0, GxEPD_WIDTH, GxEPD_HEIGHT, true);   // Partial update (fast)
-//  display.update();       // Full update (slow)
+  if(values.refresh == true){
+    display.update();       // Full update (slow)
+  }
+  else{
+    display.updateWindow(0, 0, GxEPD_WIDTH, GxEPD_HEIGHT, true);   // Partial update (fast)
+  }
 }
 
 #endif
