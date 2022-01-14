@@ -32,39 +32,36 @@
 
 #include "OBP60QRWiFi.h"                // Functions lib for WiFi QR code
 
-//#include "OBP60Data.h"                  // Data stucture  Norbert
-//#include "Page_0.h"                     // Page 0 Depth   Norbert
-//#include "Page_1.h"                     // Page 1 Speed   Norbert
-//#include "Page_2.h"                     // Page 2 VBat    Norbert
-//#include "Page_3.h"                     // Page 3 Depht / Speed  Norbert
-//#include "OBP60Pages.h"                 // Functions lib for show pages  Norbert
-
+#include "OBP60Data.h"                  // Data stucture
+#include "Page_0.h"                     // Page 0 Depth
+#include "Page_1.h"                     // Page 1 Speed
+#include "Page_2.h"                     // Page 2 VBat
+#include "Page_3.h"                     // Page 3 Depht / Speed
+#include "OBP60Pages.h"                 // Functions lib for show pages
 ///////////////////////////////
-//Adrien
-#include "OBP60Data1.h"                  // Data stucture
-#include "OBP60Page.h"     // Adrien ev hier nicht nötig
-#include "OBP60Graphics.h" // Adrien
-#include "OBP60UnitTrans.h"// Adrien
+// new  Adrien
+//#include "OBP60Graphics.h" // Adrien
+//#include "OBP60UnitTrans.h"// Adrien
 
-busData busInfo;           // Data from Gateway defined in OBP60Data1.h 
-int pageNumber = 0;        // Page number for actual page
-bool first_view = true;
-bool heartbeat = false;
+//busData busInfo; 
+//int pageNumber = 0;           // Page number for actual page
+//bool first_view = true;
+//bool heartbeat = false;
 // Global var from OBPGraphics
-float pi=3.14159265359;
-float rWindGraphic=110.0; // Radius of circle in pixel for wind graphic
-// Page variables for OBP60Page.h Adrien
-pageList pl;   // instance of page
-pageNode *actualPage;
-subPageNode *actualTile;
-// Define Page Settings Adrien
-int numbOfPage;
-String pageType[10];
-String pageTile[10][4];
-TopMargin topMargin;
-unsigned long timeBefore=0, timeBefore1=0, timeAfter=0; // refresh time debugg
-////////////////////////////////
+//float pi=3.14159265359;
+//float rWindGraphic=110.0; // Radius of circle in pixel for wind graphic
+// Page variables Adrien
+//pageList pl;   // instance of page
+// for OBP60Page.h
+//pageNode *actualPage;
+//subPageNode *actualTile;
 
+ // Define Page Settings Adrien
+//   int numbOfPage;
+//   String pageType[10];
+//   String pageTile[10][4];
+//unsigned long timeBefore=0, timeBefore1=0, timeAfter=0; // refresh time debugg
+////////////////////////////////
 tNMEA0183Msg NMEA0183Msg;
 tNMEA0183 NMEA0183;
 
@@ -245,7 +242,7 @@ void OBP60Task(void *param){
     GwApi::Status status;
 
     bool hasPosition = false;
-   
+    
     // Get configuration data from webside
     // OBP60 Settings
     bool exampleSwitch = api->getConfig()->getConfigItem(api->getConfig()->obp60Config,true)->asBoolean();
@@ -281,11 +278,10 @@ void OBP60Task(void *param){
     // OBP60 Pages
     busInfo.numpages = api->getConfig()->getConfigItem(api->getConfig()->numberPages,true)->asInt();
 
-    initBusInfo(&busInfo);
-
+/*
 /////////////////////////////////
 // OBP60 Page Adrien
-    // Define Page Settings from webside Adrien
+    // Define Page Settings Adrien
     numbOfPage = api->getConfig()->getConfigItem(api->getConfig()->numberPages,true)->asInt();
     pageType[1] = api->getConfig()->getConfigItem(api->getConfig()->Page1Type,true)->asString();
     pageType[2] = api->getConfig()->getConfigItem(api->getConfig()->Page2Type,true)->asString();
@@ -325,9 +321,10 @@ void OBP60Task(void *param){
     pageTile[6][4] = api->getConfig()->getConfigItem(api->getConfig()->Page6Tile4,true)->asString();
 
     makePageConsistent();
-
 // initialize Pages
     struct subPageNode *temp;
+    
+   
     for(int p=1; p<=numbOfPage; p++)
     {
         int n=0;
@@ -346,7 +343,7 @@ void OBP60Task(void *param){
                for(int i=1; i<=n; i++)
                {
                    temp = actualPage->subList->insertLast(pageTile[p][i],
-                      //  unit(pageTile[p][i]), 
+                        unit(pageTile[p][i]), 
                         dataContPtr(&busInfo, pageTile[p][i]));
                       //  charPtr(&busInfo, pageTile[p][i]),
                       //  validPtr(&busInfo, pageTile[p][i]));
@@ -358,53 +355,49 @@ void OBP60Task(void *param){
     actualPage = pl.start->next;
     actualTile = actualPage->sub;
 
-    
     // Initializing all necessary boat data
-// 1 .. 10
-    GwApi::BoatValue *awa=new GwApi::BoatValue(F("AWA"));
-    GwApi::BoatValue *awd=new GwApi::BoatValue(F("AWD"));
-    GwApi::BoatValue *aws=new GwApi::BoatValue(F("AWS"));
-    GwApi::BoatValue *altitude=new GwApi::BoatValue(F("Altitude"));
-    GwApi::BoatValue *btw=new GwApi::BoatValue(F("BTW"));
-    GwApi::BoatValue *cog=new GwApi::BoatValue(F("COG"));
-    GwApi::BoatValue *dtw=new GwApi::BoatValue(F("DTW"));
-    GwApi::BoatValue *date=new GwApi::BoatValue(F("Date"));
-    GwApi::BoatValue *depthtransducer=new GwApi::BoatValue(F("DepthTransducer"));
-    GwApi::BoatValue *deviation=new GwApi::BoatValue(F("Deviation"));
-// 11 .. 20
-    GwApi::BoatValue *gpsdate=new GwApi::BoatValue(F("GPSDate"));
-    GwApi::BoatValue *gpstime=new GwApi::BoatValue(F("GPSTime"));
-    GwApi::BoatValue *hdop=new GwApi::BoatValue(F("HDOP"));
-    GwApi::BoatValue *heading=new GwApi::BoatValue(F("Heading"));
-    GwApi::BoatValue *latitude=new GwApi::BoatValue(F("Latitude"));
-    GwApi::BoatValue *log=new GwApi::BoatValue(F("Log"));
-    GwApi::BoatValue *longitude=new GwApi::BoatValue(F("Longitude"));
-    GwApi::BoatValue *magneticheading=new GwApi::BoatValue(F("MagneticHeading"));
-    GwApi::BoatValue *maxaws=new GwApi::BoatValue(F("MaxAWS"));
-    GwApi::BoatValue *maxtws=new GwApi::BoatValue(F("MaxTWS"));
-// 21 .. 30
-    GwApi::BoatValue *maxstw=new GwApi::BoatValue(F("MaxSTW"));
-    GwApi::BoatValue *pdop=new GwApi::BoatValue(F("PDOP"));
-    GwApi::BoatValue *rot=new GwApi::BoatValue(F("ROT"));
-    GwApi::BoatValue *rudderposition=new GwApi::BoatValue(F("RudderPosition"));
-    GwApi::BoatValue *sog=new GwApi::BoatValue(F("SOG"));
-    GwApi::BoatValue *stw=new GwApi::BoatValue(F("STW"));
-    GwApi::BoatValue *satinfo=new GwApi::BoatValue(F("SatInfo"));
-    GwApi::BoatValue *time=new GwApi::BoatValue(F("Time"));
-    GwApi::BoatValue *twa=new GwApi::BoatValue(F("TWA"));
-    GwApi::BoatValue *twd=new GwApi::BoatValue(F("TWD"));
-// 31 .. 40
-    GwApi::BoatValue *tws=new GwApi::BoatValue(F("TWS"));
-    GwApi::BoatValue *timezone=new GwApi::BoatValue(F("Timezone"));
-    GwApi::BoatValue *triplog=new GwApi::BoatValue(F("TripLog"));
-    GwApi::BoatValue *vdop=new GwApi::BoatValue(F("VDOP"));
-    GwApi::BoatValue *variation=new GwApi::BoatValue(F("Variation"));
-    GwApi::BoatValue *wplatitude=new GwApi::BoatValue(F("WPLatitude"));
-    GwApi::BoatValue *wplongitude=new GwApi::BoatValue(F("WPLongitude"));
-    GwApi::BoatValue *waterdepth=new GwApi::BoatValue(F("WaterDepth"));
-    GwApi::BoatValue *watertemperature=new GwApi::BoatValue(F("WaterTemperature"));
-    GwApi::BoatValue *xte=new GwApi::BoatValue(F("XTE"));
-// total 40 values
+    GwApi::BoatValue *awa=new GwApi::BoatValue(F("AWA"));dataContainer AWA;
+    GwApi::BoatValue *awd=new GwApi::BoatValue(F("AWD"));dataContainer AWD;
+    GwApi::BoatValue *aws=new GwApi::BoatValue(F("AWS"));dataContainer AWS;
+    GwApi::BoatValue *altitude=new GwApi::BoatValue(F("Altitude"));dataContainer Altitude;
+    GwApi::BoatValue *btw=new GwApi::BoatValue(F("BTW"));dataContainer BTW;
+    GwApi::BoatValue *cog=new GwApi::BoatValue(F("COG"));dataContainer COG;
+    GwApi::BoatValue *dtw=new GwApi::BoatValue(F("DTW"));dataContainer DTW;
+    GwApi::BoatValue *date=new GwApi::BoatValue(F("Date"));dataContainer Date;
+    GwApi::BoatValue *depthtransducer=new GwApi::BoatValue(F("DepthTransducer"));dataContainer DepthTransducer;
+    GwApi::BoatValue *deviation=new GwApi::BoatValue(F("Deviation"));dataContainer Deviation;
+    GwApi::BoatValue *gpsdate=new GwApi::BoatValue(F("GPSDate"));dataContainer GPSDate;
+    GwApi::BoatValue *gpstime=new GwApi::BoatValue(F("GPSTime"));dataContainer GPSTime;
+    GwApi::BoatValue *hdop=new GwApi::BoatValue(F("HDOP"));dataContainer HDOP;
+    GwApi::BoatValue *heading=new GwApi::BoatValue(F("Heading"));dataContainer Heading;
+    GwApi::BoatValue *latitude=new GwApi::BoatValue(F("Latitude"));dataContainer Latitude;
+    GwApi::BoatValue *log=new GwApi::BoatValue(F("Log"));dataContainer Log;
+    GwApi::BoatValue *longitude=new GwApi::BoatValue(F("Longitude"));dataContainer Longitude;
+    GwApi::BoatValue *magneticheading=new GwApi::BoatValue(F("MagneticHeading"));dataContainer MagneticHeading;
+    GwApi::BoatValue *maxaws=new GwApi::BoatValue(F("MaxAWS"));dataContainer MaxAWS;
+    GwApi::BoatValue *maxtws=new GwApi::BoatValue(F("MaxTWS"));dataContainer MaxTWS;
+    GwApi::BoatValue *maxstw=new GwApi::BoatValue(F("MaxSTW"));dataContainer MaxSTW;
+    GwApi::BoatValue *pdop=new GwApi::BoatValue(F("PDOP"));dataContainer PDOP;
+    GwApi::BoatValue *rot=new GwApi::BoatValue(F("ROT"));dataContainer ROT;
+    GwApi::BoatValue *rudderposition=new GwApi::BoatValue(F("RudderPosition"));dataContainer RudderPosition;
+    GwApi::BoatValue *sog=new GwApi::BoatValue(F("SOG"));dataContainer SOG;
+    GwApi::BoatValue *stw=new GwApi::BoatValue(F("STW"));dataContainer STW;
+    GwApi::BoatValue *satinfo=new GwApi::BoatValue(F("SatInfo"));dataContainer SatInfo;
+    GwApi::BoatValue *time=new GwApi::BoatValue(F("Time"));dataContainer Time;
+    GwApi::BoatValue *twa=new GwApi::BoatValue(F("TWA"));dataContainer TWA;
+    GwApi::BoatValue *twd=new GwApi::BoatValue(F("TWD"));dataContainer TWD;
+    GwApi::BoatValue *tws=new GwApi::BoatValue(F("TWS"));dataContainer TWS;
+    GwApi::BoatValue *timezone=new GwApi::BoatValue(F("Timezone"));dataContainer Timezone;
+    GwApi::BoatValue *triplog=new GwApi::BoatValue(F("TripLog"));dataContainer TripLog;
+    GwApi::BoatValue *vdop=new GwApi::BoatValue(F("VDOP"));dataContainer VDOP;
+    GwApi::BoatValue *variation=new GwApi::BoatValue(F("Variation"));dataContainer Variation;
+    GwApi::BoatValue *wplatitude=new GwApi::BoatValue(F("WPLatitude"));dataContainer WPLatitude;
+    GwApi::BoatValue *wplongitude=new GwApi::BoatValue(F("WPLongitude"));dataContainer WPLongitude;
+    GwApi::BoatValue *waterdepth=new GwApi::BoatValue(F("WaterDepth"));dataContainer WaterDepth;
+    GwApi::BoatValue *watertemperature=new GwApi::BoatValue(F("WaterTemperature"));dataContainer WaterTemperature;
+    GwApi::BoatValue *xte=new GwApi::BoatValue(F("XTE"));dataContainer XTE;
+
+
     GwApi::BoatValue *valueList[]=
     {
         awa, awd, aws, altitude, btw, cog, dtw, date, depthtransducer, deviation,  // 10
@@ -412,9 +405,11 @@ void OBP60Task(void *param){
         maxstw, pdop, rot, rudderposition, sog, stw, satinfo, time, twa, twd, // 10
         tws, timezone, triplog, vdop, variation, wplatitude, wplongitude, waterdepth, watertemperature, xte //
     };
-///////////////////////////////////////
 
-/*  Norbert
+
+///////////////////////////////////////
+*/
+
     // Initializing all necessary boat data
     GwApi::BoatValue *cog=new GwApi::BoatValue(F("COG"));
     GwApi::BoatValue *twd=new GwApi::BoatValue(F("TWD"));
@@ -441,7 +436,6 @@ void OBP60Task(void *param){
     GwApi::BoatValue *hdop=new GwApi::BoatValue(F("HDOP"));
     GwApi::BoatValue *pdop=new GwApi::BoatValue(F("PDOP"));
     GwApi::BoatValue *valueList[]={cog, twd, awd, sog, stw, tws, aws, maxtws, maxaws, awa, heading, mheading, rot, variation, date, time, longitude, latitude, waterdepth, hdop, pdop};
-*/
 
     //Init E-Ink display
     display.init();                         // Initialize and clear display
@@ -464,7 +458,6 @@ void OBP60Task(void *param){
         }
     }
 
-
     // Task Loop
     //###############################
     while(true){
@@ -472,7 +465,7 @@ void OBP60Task(void *param){
         delay(10);  // 10ms
 
         // Backlight On/Off Subtask 100ms
-        if((taskRunCounter % 1) == 0){    //10
+        if((taskRunCounter % 10) == 0){
             // If key controled
             if(backlightMode == "Control by Key"){
                 if(keystatus == "6s"){
@@ -480,26 +473,25 @@ void OBP60Task(void *param){
                     togglePortPin(OBP_BACKLIGHT_LED);
                     keystatus = "0";
                 }
-                
             }
             // Change page number
             if(keystatus == "5s"){
-                actualPage=actualPage->next;  //Adrien
-                actualTile = actualPage->sub; //Adrien               
-                //pageNumber ++;
-                //if(pageNumber > MAX_PAGE_NUMBER - 1){
-                //    pageNumber = 0;
-                //}
+                //actualPage=actualPage->next;  //Adrien
+                //actualTile = actualPage->sub; //Adrien               
+                pageNumber ++;
+                if(pageNumber > MAX_PAGE_NUMBER - 1){
+                    pageNumber = 0;
+                }
                 first_view = true;
                 keystatus = "0";
             }
             if(keystatus == "1s"){
-                actualPage=actualPage->prev; //Adrien
-                actualTile = actualPage->sub;//Adrien                
-                //pageNumber --;
-                //if(pageNumber < 0){
-                //    pageNumber = MAX_PAGE_NUMBER - 1;
-                //}
+                //actualPage=actualPage->prev; //Adrien
+                //actualTile = actualPage->sub;//Adrien                
+                pageNumber --;
+                if(pageNumber < 0){
+                    pageNumber = MAX_PAGE_NUMBER - 1;
+                }
                 first_view = true;
                 keystatus = "0";
             }
@@ -516,7 +508,7 @@ void OBP60Task(void *param){
 
         // Send NMEA0183 GPS data on several bus systems
         if(busInfo.gps == true){   // If config enabled
-                if(gps_ready == true){
+                if(gps_ready = true){
                     tNMEA0183Msg NMEA0183Msg;
                     while(NMEA0183.GetMessage(NMEA0183Msg)){
                         api->sendNMEA0183Message(NMEA0183Msg);
@@ -546,8 +538,7 @@ void OBP60Task(void *param){
         busInfo.tcpClientConnected = status.tcpClientConnected;
         busInfo.n2kRx = status.n2kRx;
         busInfo.n2kTx = status.n2kTx;
-        
-/*  Norbert
+
         // Read the current bus data and copy to stucture
         api->getBoatDataValues(20, valueList);
 
@@ -625,9 +616,7 @@ void OBP60Task(void *param){
 
         busInfo.PDOP.fvalue = pdop->value;
         busInfo.PDOP.valid = pdop->valid;
-*/
-
-
+/*
 ///////////////////////  Adrien
 
         //fetch the current values of the items that we have in valueList[]
@@ -635,184 +624,344 @@ void OBP60Task(void *param){
 
     //awa value in rad
         busInfo.AWA.fvalue = rad2deg( awa->value);
-        sprintf(busInfo.AWA.svalue , "%4.0f", busInfo.AWA.fvalue);
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",awa->getName().c_str(),formatValue(awa).c_str());
+        sprintf(busInfo.AWA.svalue , "%4.1f", busInfo.AWA.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"AWA: %4.1f",busInfo.AWA.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"AWA: %s",busInfo.AWA.svalue ); 
+        //awa->getFormat().toCharArray(busInfo.AWA.unit, 8, 0);
         busInfo.AWA.valid = int(awa->valid);
     
     //awd value in rad 
     //Apparent Wind Direction (AWD) - 
     //Compass direction from which the wind is coming relative to the boat.
         busInfo.AWD.fvalue = rad2deg(awd->value);
-        sprintf(busInfo.AWD.svalue , "%4.0f", busInfo.AWD.fvalue);
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",awd->getName().c_str(),formatValue(awd).c_str());
+        sprintf(busInfo.AWD.svalue , "%4.1f", busInfo.AWD.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"AWD: %4.1f",busInfo.AWD.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"AWD: %s",busInfo.AWD.svalue ); 
+        //awd->getFormat().toCharArray(busInfo.AWD.unit, 8, 0);
         busInfo.AWD.valid = int(awd->valid);
     //aws value in m/s  
         busInfo.AWS.fvalue = mps2kn(aws->value);
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",aws->getName().c_str(),formatValue(aws).c_str());
         sprintf(busInfo.AWS.svalue , "%4.1f", busInfo.AWS.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"AWS: %4.1f",busInfo.AWS.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"AWS: %s",busInfo.AWS.svalue ); 
+        //aws->getFormat().toCharArray(busInfo.AWS.unit, 8, 0);
         busInfo.AWS.valid = int(aws->valid);
     //altitude 
         busInfo.Altitude.fvalue = altitude->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",altitude->getName().c_str(),formatValue(altitude).c_str());
         sprintf(busInfo.Altitude.svalue , "%4.1f", busInfo.Altitude.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"Altitude: %4.1f",busInfo.Altitude.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"Altitude: %s",busInfo.Altitude.svalue ); 
+        //altitude->getFormat().toCharArray(busInfo.Altitude.unit, 8, 0);
         busInfo.Altitude.valid = int(altitude->valid);
     //btw value in ????????????????
     // Bearing to Waypoint
         busInfo.BTW.fvalue = btw->value;
-        sprintf(busInfo.BTW.svalue , "%4.0f", busInfo.BTW.fvalue);
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",btw->getName().c_str(),formatValue(btw).c_str());
+        sprintf(busInfo.BTW.svalue , "%4.1f", busInfo.BTW.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"BTW: %4.1f",busInfo.BTW.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"BTW: %s",busInfo.BTW.svalue ); 
+        //btw->getFormat().toCharArray(busInfo.BTW.unit, 8, 0);
         busInfo.BTW.valid = int(btw->valid);
     //cog value in rad
         busInfo.COG.fvalue = rad2deg(cog->value);
-        sprintf(busInfo.COG.svalue , "%4.0f", busInfo.COG.fvalue);
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",cog->getName().c_str(),formatValue(cog).c_str());
+        sprintf(busInfo.COG.svalue , "%4.1f", busInfo.COG.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"COG: %4.1f",busInfo.COG.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"COG: %s",busInfo.COG.svalue ); 
+        //cog->getFormat().toCharArray(busInfo.COG.unit, 8, 0);
         busInfo.COG.valid = int(cog->valid);
     //dtw DTW Distance To Waypoint
         busInfo.DTW.fvalue = dtw->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",dtw->getName().c_str(),formatValue(dtw).c_str());
         sprintf(busInfo.DTW.svalue , "%4.1f", busInfo.DTW.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"DTW: %4.1f",busInfo.DTW.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"DTW: %s",busInfo.DTW.svalue ); 
+        //dtw->getFormat().toCharArray(busInfo.DTW.unit, 8, 0);
         busInfo.DTW.valid = int(dtw->valid);
     //date value in ?????????????
         busInfo.Date.fvalue = date->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",date->getName().c_str(),formatValue(date).c_str());
         sprintf(busInfo.Date.svalue , "%4.1f", busInfo.Date.fvalue);
         strcpy(busInfo.Date.svalue,formatValue(date).c_str());
+        //LOG_DEBUG(GwLog::DEBUG,"Date: %4.1f",busInfo.Date.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"Date: %s",busInfo.Date.svalue ); 
+        //date->getFormat().toCharArray(busInfo.Date.unit, 8, 0);
         busInfo.Date.valid = int(date->valid);
     //depthtransducer value in ??????????????????
         busInfo.DepthTransducer.fvalue = depthtransducer->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",depthtransducer->getName().c_str(),formatValue(depthtransducer).c_str());
         sprintf(busInfo.DepthTransducer.svalue , "%4.1f", busInfo.DepthTransducer.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"DepthTransducer: %4.1f",busInfo.DepthTransducer.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"DepthTransducer: %s",busInfo.DepthTransducer.svalue ); 
+        //depthtransducer->getFormat().toCharArray(busInfo.DepthTransducer.unit, 8, 0);
         busInfo.DepthTransducer.valid = int(depthtransducer->valid);
     //deviation  value in ???????????????????
         busInfo.Deviation.fvalue = deviation->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",deviation->getName().c_str(),formatValue(deviation).c_str());
         sprintf(busInfo.Deviation.svalue , "%4.1f", busInfo.Deviation.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"Deviation: %4.1f",busInfo.Deviation.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"Deviation: %s",busInfo.Deviation.svalue ); 
+        //deviation->getFormat().toCharArray(busInfo.Deviation.unit, 8, 0);
         busInfo.Deviation.valid = int(deviation->valid);
     //gpsdate   value in ???????????????????
         busInfo.GPSDate.fvalue = gpsdate->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",gpsdate->getName().c_str(),formatValue(gpsdate).c_str());
         sprintf(busInfo.GPSDate.svalue , "%4.1f", busInfo.GPSDate.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"GPSDate: %4.1f",busInfo.GPSDate.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"GPSDate: %s",busInfo.GPSDate.svalue ); 
+        //gpsdate->getFormat().toCharArray(busInfo.GPSDate.unit, 8, 0);
         busInfo.GPSDate.valid = int(gpsdate->valid);
     //gpstime   value in ???????????????????
         busInfo.GPSTime.fvalue = gpstime->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",gpstime->getName().c_str(),formatValue(gpstime).c_str());
         sprintf(busInfo.GPSTime.svalue , "%4.1f", busInfo.GPSTime.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"GPSTime: %4.1f",busInfo.GPSTime.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"GPSTime: %s",busInfo.GPSTime.svalue ); 
+        //gpstime->getFormat().toCharArray(busInfo.GPSTime.unit, 8, 0);
         busInfo.GPSTime.valid = int(gpstime->valid);
     //hdop value in relative unit
         busInfo.HDOP.fvalue = hdop->value;
-        sprintf(busInfo.HDOP.svalue , "%4.0f", busInfo.HDOP.fvalue);
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",hdop->getName().c_str(),formatValue(hdop).c_str());
+        sprintf(busInfo.HDOP.svalue , "%4.1f", busInfo.HDOP.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"HDOP: %4.1f",busInfo.HDOP.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"HDOP: %s",busInfo.HDOP.svalue ); 
+        //hdop->getFormat().toCharArray(busInfo.HDOP.unit, 8, 0);
         busInfo.HDOP.valid = int(hdop->valid);
     //heading value in rad
         busInfo.Heading.fvalue = rad2deg(heading->value);
-        sprintf(busInfo.Heading.svalue , "%4.0f", busInfo.Heading.fvalue);
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",heading->getName().c_str(),formatValue(heading).c_str());
+        sprintf(busInfo.Heading.svalue , "%4.1f", busInfo.Heading.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"Heading: %4.1f",busInfo.Heading.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"Heading: %s",busInfo.Heading.svalue ); 
+        //heading->getFormat().toCharArray(busInfo.Heading.unit, 8, 0);
         busInfo.Heading.valid = int(heading->valid);
-    //latitude val in deg.decimal
+    //latitude val in deg.dec
         busInfo.Latitude.fvalue = latitude->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",latitude->getName().c_str(),formatValue(latitude).c_str());
         sprintf(busInfo.Latitude.svalue , "%7.4f", busInfo.Latitude.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"Latitude: %4.1f",busInfo.Latitude.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"Latitude: %s",busInfo.Latitude.svalue ); 
         latitude->getFormat().toCharArray(busInfo.Latitude.unit, 8, 0);
         busInfo.Latitude.valid = int(latitude->valid);
     //log
         busInfo.Log.fvalue = log->value;
-        sprintf(busInfo.Log.svalue , "%6.1f", busInfo.Log.fvalue);
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",log->getName().c_str(),formatValue(log).c_str());
+        sprintf(busInfo.Log.svalue , "%6.2f", busInfo.Log.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"Log: %4.1f",busInfo.Log.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"Log: %s",busInfo.Log.svalue ); 
+        //log->getFormat().toCharArray(busInfo.Log.unit, 8, 0);
         busInfo.Log.valid = int(log->valid);
     //longitude value in deg.decimal
         busInfo.Longitude.fvalue = longitude->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",longitude->getName().c_str(),formatValue(longitude).c_str());
         sprintf(busInfo.Longitude.svalue , "%7.4f", busInfo.Longitude.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"Longitude: %4.1f",busInfo.Longitude.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"Longitude: %s",busInfo.Longitude.svalue ); 
+        //longitude->getFormat().toCharArray(busInfo.Longitude.unit, 8, 0);
         busInfo.Longitude.valid = int(longitude->valid);
     //magneticheading 
         busInfo.MagneticHeading.fvalue = magneticheading->value;
-        sprintf(busInfo.MagneticHeading.svalue , "%4.0f", busInfo.MagneticHeading.fvalue);
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",magneticheading->getName().c_str(),formatValue(magneticheading).c_str());
+        sprintf(busInfo.MagneticHeading.svalue , "%4.1f", busInfo.MagneticHeading.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"MagneticHeading: %4.1f",busInfo.MagneticHeading.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"MagneticHeading: %s",busInfo.MagneticHeading.svalue ); 
+        //magneticheading->getFormat().toCharArray(busInfo.MagneticHeading.unit, 8, 0);
         busInfo.MagneticHeading.valid = int(magneticheading->valid);
     //maxaws 
         busInfo.MaxAWS.fvalue = maxaws->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",maxaws->getName().c_str(),formatValue(maxaws).c_str());
         sprintf(busInfo.MaxAWS.svalue , "%4.1f", busInfo.MaxAWS.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"MaxAWS: %4.1f",busInfo.MaxAWS.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"MaxAWS: %s",busInfo.MaxAWS.svalue ); 
+        //maxaws->getFormat().toCharArray(busInfo.MaxAWS.unit, 8, 0);
         busInfo.MaxAWS.valid = int(maxaws->valid);
     //maxtws
         busInfo.MaxTWS.fvalue = maxtws->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",maxtws->getName().c_str(),formatValue(maxtws).c_str());
         sprintf(busInfo.MaxTWS.svalue , "%4.1f", busInfo.MaxTWS.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"MaxTWS: %4.1f",busInfo.MaxTWS.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"MaxTWS: %s",busInfo.MaxTWS.svalue ); 
+        //maxtws->getFormat().toCharArray(busInfo.MaxTWS.unit, 8, 0);
         busInfo.MaxTWS.valid = int(maxtws->valid);
     //maxstw 
         busInfo.MaxSTW.fvalue = maxstw->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",maxstw->getName().c_str(),formatValue(maxstw).c_str());
         sprintf(busInfo.MaxSTW.svalue , "%4.1f", busInfo.MaxSTW.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"MaxSTW: %4.1f",busInfo.MaxSTW.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"MaxSTW: %s",busInfo.MaxSTW.svalue ); 
+        //maxstw->getFormat().toCharArray(busInfo.MaxSTW.unit, 8, 0);
         busInfo.MaxSTW.valid = int(maxstw->valid);
     //pdop 
         busInfo.PDOP.fvalue = pdop->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",pdop->getName().c_str(),formatValue(pdop).c_str());
         sprintf(busInfo.PDOP.svalue , "%4.1f", busInfo.PDOP.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"PDOP: %4.1f",busInfo.PDOP.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"PDOP: %s",busInfo.PDOP.svalue ); 
+        //pdop->getFormat().toCharArray(busInfo.PDOP.unit, 8, 0);
         busInfo.PDOP.valid = int(pdop->valid);
     //rot
         busInfo.ROT.fvalue = rot->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",rot->getName().c_str(),formatValue(rot).c_str());
         sprintf(busInfo.ROT.svalue , "%4.1f", busInfo.ROT.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"ROT: %4.1f",busInfo.ROT.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"ROT: %s",busInfo.ROT.svalue ); 
+        //rot->getFormat().toCharArray(busInfo.ROT.unit, 8, 0);
         busInfo.ROT.valid = int(rot->valid);
     //rudderposition 
         busInfo.RudderPosition.fvalue = rudderposition->value;
-        sprintf(busInfo.RudderPosition.svalue , "%4.0f", busInfo.RudderPosition.fvalue);
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",rudderposition->getName().c_str(),formatValue(rudderposition).c_str());
+        sprintf(busInfo.RudderPosition.svalue , "%4.1f", busInfo.RudderPosition.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"RudderPosition: %4.1f",busInfo.RudderPosition.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"RudderPosition: %s",busInfo.RudderPosition.svalue ); 
+        //rudderposition->getFormat().toCharArray(busInfo.RudderPosition.unit, 8, 0);
         busInfo.RudderPosition.valid = int(rudderposition->valid);
     //sog 
-        busInfo.SOG.fvalue = mps2kn(sog->value);
+        busInfo.SOG.fvalue = sog->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",sog->getName().c_str(),formatValue(sog).c_str());
         sprintf(busInfo.SOG.svalue , "%4.1f", busInfo.SOG.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"SOG: %4.1f",busInfo.SOG.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"SOG: %s",busInfo.SOG.svalue ); 
+        //sog->getFormat().toCharArray(busInfo.SOG.unit, 8, 0);
         busInfo.SOG.valid = int(sog->valid);
     //stw
-        busInfo.STW.fvalue = mps2kn(stw->value);
+        busInfo.STW.fvalue = stw->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",stw->getName().c_str(),formatValue(stw).c_str());
         sprintf(busInfo.STW.svalue , "%4.1f", busInfo.STW.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"STW: %4.1f",busInfo.STW.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"STW: %s",busInfo.STW.svalue ); 
+        //stw->getFormat().toCharArray(busInfo.STW.unit, 8, 0);
         busInfo.STW.valid = int(stw->valid);
     //satinfo 
         busInfo.SatInfo.fvalue = satinfo->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",satinfo->getName().c_str(),formatValue(satinfo).c_str());
         sprintf(busInfo.SatInfo.svalue , "%4.1f", busInfo.SatInfo.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"SatInfo: %4.1f",busInfo.SatInfo.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"SatInfo: %s",busInfo.SatInfo.svalue ); 
+        //satinfo->getFormat().toCharArray(busInfo.SatInfo.unit, 8, 0);
         busInfo.SatInfo.valid = int(satinfo->valid);
     //time 
         busInfo.Time.fvalue = time->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",time->getName().c_str(),formatValue(time).c_str());
         sprintf(busInfo.Time.svalue , "%4.1f", busInfo.Time.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"Time: %4.1f",busInfo.Time.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"Time: %s",busInfo.Time.svalue ); 
+        //time->getFormat().toCharArray(busInfo.Time.unit, 8, 0);
         busInfo.Time.valid = int(time->valid);
     //twa 
-        busInfo.TWA.fvalue = rad2deg(twa->value);
-        sprintf(busInfo.TWA.svalue , "%4.0f", busInfo.TWA.fvalue);
+        busInfo.TWA.fvalue = twa->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",twa->getName().c_str(),formatValue(twa).c_str());
+        sprintf(busInfo.TWA.svalue , "%4.1f", busInfo.TWA.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"TWA: %4.1f",busInfo.TWA.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"TWA: %s",busInfo.TWA.svalue ); 
+        //twa->getFormat().toCharArray(busInfo.TWA.unit, 8, 0);
         busInfo.TWA.valid = int(twa->valid);
     //twd
-        busInfo.TWD.fvalue = rad2deg(twd->value);
-        sprintf(busInfo.TWD.svalue , "%4.0f", busInfo.TWD.fvalue);
+        busInfo.TWD.fvalue = twd->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",twd->getName().c_str(),formatValue(twd).c_str());
+        sprintf(busInfo.TWD.svalue , "%4.1f", busInfo.TWD.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"TWD: %4.1f",busInfo.TWD.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"TWD: %s",busInfo.TWD.svalue ); 
+        //twd->getFormat().toCharArray(busInfo.TWD.unit, 8, 0);
         busInfo.TWD.valid = int(twd->valid);
     //tws
-        busInfo.TWS.fvalue = mps2kn(tws->value);
+        busInfo.TWS.fvalue = tws->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",tws->getName().c_str(),formatValue(tws).c_str());
         sprintf(busInfo.TWS.svalue , "%4.1f", busInfo.TWS.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"TWS: %4.1f",busInfo.TWS.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"TWS: %s",busInfo.TWS.svalue ); 
+        //tws->getFormat().toCharArray(busInfo.TWS.unit, 8, 0);
         busInfo.TWS.valid = int(tws->valid);
     //timezone 
         busInfo.Timezone.fvalue = timezone->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",timezone->getName().c_str(),formatValue(timezone).c_str());
         sprintf(busInfo.Timezone.svalue , "%4.1f", busInfo.Timezone.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"TimeZone: %4.1f",busInfo.Timezone.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"Timezone: %s",busInfo.Timezone.svalue ); 
+        //timezone->getFormat().toCharArray(busInfo.Timezone.unit, 8, 0);
         busInfo.Timezone.valid = int(timezone->valid);
     //triplog 
         busInfo.TripLog.fvalue = triplog->value;
-        sprintf(busInfo.TripLog.svalue , "%5.1f", busInfo.TripLog.fvalue);
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",triplog->getName().c_str(),formatValue(triplog).c_str());
+        sprintf(busInfo.TripLog.svalue , "%4.1f", busInfo.TripLog.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"Triplog: %4.1f",busInfo.TripLog.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"TripLog: %s",busInfo.TripLog.svalue ); 
+        //triplog->getFormat().toCharArray(busInfo.TripLog.unit, 8, 0);
         busInfo.TripLog.valid = int(triplog->valid);
     //vdop
         busInfo.VDOP.fvalue = vdop->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",vdop->getName().c_str(),formatValue(vdop).c_str());
         sprintf(busInfo.VDOP.svalue , "%4.1f", busInfo.VDOP.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"VDOP: %4.1f",busInfo.VDOP.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"VDOP: %s",busInfo.VDOP.svalue ); 
+        //vdop->getFormat().toCharArray(busInfo.VDOP.unit, 8, 0);
         busInfo.VDOP.valid = int(vdop->valid);
     //variation 
         busInfo.Variation.fvalue = variation->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",variation->getName().c_str(),formatValue(variation).c_str());
         sprintf(busInfo.Variation.svalue , "%4.1f", busInfo.Variation.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"Variation: %4.1f",busInfo.Variation.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"Variation: %s",busInfo.Variation.svalue ); 
+        //variation->getFormat().toCharArray(busInfo.Variation.unit, 8, 0);
         busInfo.Variation.valid = int(variation->valid);
     //wplatitude 
         busInfo.WPLatitude.fvalue = wplatitude->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",wplatitude->getName().c_str(),formatValue(wplatitude).c_str());
         sprintf(busInfo.WPLatitude.svalue , "%4.1f", busInfo.WPLatitude.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"WPLatitude: %4.1f",busInfo.WPLatitude.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"WPLatitude: %s",busInfo.WPLatitude.svalue ); 
+        //wplatitude->getFormat().toCharArray(busInfo.WPLatitude.unit, 8, 0);
         busInfo.WPLatitude.valid = int(wplatitude->valid);
     //wplongitude 
         busInfo.WPLongitude.fvalue = wplongitude->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",wplongitude->getName().c_str(),formatValue(wplongitude).c_str());
         sprintf(busInfo.WPLongitude.svalue , "%4.1f", busInfo.WPLongitude.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"WPLongitude: %4.1f",busInfo.WPLongitude.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"WPLongitude: %s",busInfo.WPLongitude.svalue ); 
+        //wplongitude->getFormat().toCharArray(busInfo.WPLongitude.unit, 8, 0);
         busInfo.WPLongitude.valid = int(wplongitude->valid);
     //waterdepth
         busInfo.WaterDepth.fvalue = waterdepth->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",waterdepth->getName().c_str(),formatValue(waterdepth).c_str());
         sprintf(busInfo.WaterDepth.svalue , "%4.1f", busInfo.WaterDepth.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"WaterDepth: %4.1f",busInfo.WaterDepth.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"WaterDepth: %s",busInfo.WaterDepth.svalue ); 
+        //waterdepth->getFormat().toCharArray(busInfo.WaterDepth.unit, 8, 0);
         busInfo.WaterDepth.valid = int(waterdepth->valid); 
     //watertemperature 
         busInfo.WaterTemperature.fvalue = watertemperature->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",watertemperature->getName().c_str(),formatValue(watertemperature).c_str());
         sprintf(busInfo.WaterTemperature.svalue , "%4.1f", busInfo.WaterTemperature.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"WaterTemperature: %4.1f",busInfo.WaterTemperature.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"WaterTemperature: %s",busInfo.WaterTemperature.svalue ); 
+        //watertemperature->getFormat().toCharArray(busInfo.WaterTemperature.unit, 8, 0);
         busInfo.WaterTemperature.valid = int(watertemperature->valid);
     //xte 
         busInfo.XTE.fvalue = xte->value;
+        //LOG_DEBUG(GwLog::LOG,"%s new value %s",xte->getName().c_str(),formatValue(xte).c_str());
         sprintf(busInfo.XTE.svalue , "%4.1f", busInfo.XTE.fvalue);
+        //LOG_DEBUG(GwLog::DEBUG,"XTE: %4.1f",busInfo.XTE.fvalue ); 
+        //LOG_DEBUG(GwLog::DEBUG,"XTE: %s",busInfo.XTE.svalue ); 
+        //xte->getFormat().toCharArray(busInfo.XTE.unit, 8, 0);
         busInfo.XTE.valid = int(xte->valid);
 
-///////////////////////  Adrien
 
+///////////////////////  Adrien
+*/
 
         // Subtask all 500ms show pages
-        if((taskRunCounter % 5) == 0  || first_view == true){   
+        if((taskRunCounter % 50) == 0  || first_view == true){
             LOG_DEBUG(GwLog::DEBUG,"Keystatus: %s", keystatus);
-            LOG_DEBUG(GwLog::DEBUG,"BusInfo Title: %s", busInfo.AWA.title);
+            LOG_DEBUG(GwLog::DEBUG,"Pagenumber: %d", pageNumber);
             if(displayMode == "Logo + QR Code" || displayMode == "Logo" || displayMode == "White Screen"){
-                //showPage(busInfo);  //Norbert
-                timeBefore=timeAfter; //Adrien
-                timeAfter=millis();   //Adrien
-                pageUpdate(&busInfo); //Adrien
-                if(first_view) first_view=false; //Adrien
+                showPage(busInfo);
+                //timeBefore=timeAfter; //Adrien
+                //timeAfter=millis();   //Adrien
+                //showPartialUpdate(&busInfo); //Adrien
+                //if(first_view) first_view=false; //Adrien
             }
         }
 
@@ -827,5 +976,5 @@ void OBP60Task(void *param){
     vTaskDelete(NULL);
     
 }
-   
+
 #endif

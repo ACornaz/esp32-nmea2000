@@ -89,6 +89,7 @@ typedef struct{
   dataContainer STW;
   dataContainer SatInfo;
   dataContainer Time;
+  dataContainer TWA;
   dataContainer TWD;
   dataContainer TWS;
   dataContainer Timezone;
