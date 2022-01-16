@@ -146,6 +146,9 @@ void pageUpdate(busData *bInfo,bool firstView)
     case 11:
       printTimer(bInfo);
       break;
+    case 12:
+      printTWD(bInfo);
+      break;  
     default:
     ;        
   } 

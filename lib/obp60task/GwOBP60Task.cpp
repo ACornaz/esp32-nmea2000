@@ -254,7 +254,7 @@ void OBP60Task(void *param){
     api->getConfig()->getConfigItem(api->getConfig()->apPassword,true)->asString().toCharArray(busInfo.wifipass, 32);
     busInfo.useadminpass = api->getConfig()->getConfigItem(api->getConfig()->useAdminPass,true)->asBoolean();
     api->getConfig()->getConfigItem(api->getConfig()->adminPassword,true)->asString().toCharArray(busInfo.adminpassword, 32);
-    api->getConfig()->getConfigItem(api->getConfig()->logLevel,true)->asString().toCharArray(busInfo.loglevel, 16);
+ //   api->getConfig()->getConfigItem(api->getConfig()->logLevel,true)->asString().toCharArray(busInfo.loglevel, 16);
     // WiFi client settings
     busInfo.wificlienton = api->getConfig()->getConfigItem(api->getConfig()->wifiClient,true)->asBoolean();
     api->getConfig()->getConfigItem(api->getConfig()->wifiSSID,true)->asString().toCharArray(busInfo.wificlientssid, 32);
@@ -354,6 +354,7 @@ void OBP60Task(void *param){
         if(pageType[p]=="4") n=4;
         if(pageType[p]=="Wind Rose") n=10;
         if(pageType[p]=="Timer") n=11;
+        if(pageType[p]=="TWD Shift") n=12;
         if(n!=0)
         {
            pl.insertLast(n);
