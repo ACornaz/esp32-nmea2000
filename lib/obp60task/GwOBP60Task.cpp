@@ -843,6 +843,11 @@ void OBP60Task(void *param){
         busInfo.TWD.fvalue = rad2deg(twd->value);
         sprintf(busInfo.TWD.svalue , "%4.0f", busInfo.TWD.fvalue);
         busInfo.TWD.valid = int(twd->valid);
+        //busInfo.TWD.fvalue = 140.0 + 20.0*sin(2*pi/(1000.*60.)*millis());  // only for tests
+        //busInfo.TWD.valid = true;  // only for tests
+        if(busInfo.TWD.valid){
+            storeTWD(&busInfo);
+        }
     //tws
         busInfo.TWS.fvalue = mps2kn(tws->value);
         sprintf(busInfo.TWS.svalue , "%4.1f", busInfo.TWS.fvalue);

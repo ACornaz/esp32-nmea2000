@@ -182,6 +182,13 @@ void initBusInfo(busData *bInfo)
   bInfo->WaterDepth.longValue=false;
   bInfo->WaterTemperature.longValue=false;
   bInfo->XTE.longValue=false;
+
+  // TWD array for TWD Graphic
+  for(int i=0;i<300;i++)
+  {
+    bInfo->TWDarray[i][0]=0.0;
+    bInfo->TWDarray[i][1]=0.0;
+  }
 }
 
 float* valuePtr(busData *bInfo, String pageTile)
@@ -332,4 +339,38 @@ void printSvalue(dataContainer * dc)
       sprintf(dc->svalue , "  %4.0f", dc->fvalue);
   }
   
+}
+
+void storeTWD(busData *bInfo)
+{
+  static int i=1;
+  static float TWDsum=0;
+  static unsigned long int timeSum=0;
+  static unsigned long int lastTime=millis();
+  
+  if(millis()-lastTime>1000)
+  {
+    lastTime=millis();
+    if(i==1)
+    {
+       TWDsum = TWDsum + bInfo->TWD.fvalue;
+       timeSum = timeSum + lastTime;
+       i++;
+    } 
+    if(i==2)
+   {
+      TWDsum = TWDsum + bInfo->TWD.fvalue;
+      timeSum = timeSum + lastTime;
+      for(int j=299;j>0;j--) 
+      {
+          bInfo->TWDarray[j][0] = bInfo->TWDarray[j-1][0];
+          bInfo->TWDarray[j][1] = bInfo->TWDarray[j-1][1];
+      }
+      bInfo->TWDarray[0][0] = (double)timeSum/2.0;
+      bInfo->TWDarray[0][1] = TWDsum/2.0;
+      i=1;
+      timeSum=0.0;
+      TWDsum=0.0;
+    }
+  }
 }

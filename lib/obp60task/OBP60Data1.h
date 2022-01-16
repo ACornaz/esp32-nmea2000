@@ -120,6 +120,7 @@ typedef struct{
   dataContainer WaterDepth;
   dataContainer WaterTemperature;
   dataContainer XTE;
+  float TWDarray[300][2];
 } busData;
 
 void initBusInfo(busData *bInfo);
@@ -128,5 +129,6 @@ char* charPtr(busData *bInfo, String pageTile);
 bool* validPtr(busData *bInfo, String pageTile);
 dataContainer* dataContPtr(busData *bInfo, String pageTile);
 void printSvalue(dataContainer * dc);
+void storeTWD(busData *bInfo);
 
 #endif
