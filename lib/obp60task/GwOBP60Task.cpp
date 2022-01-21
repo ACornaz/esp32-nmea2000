@@ -347,7 +347,7 @@ void OBP60Task(void *param){
     struct subPageNode *temp;
     for(int p=1; p<=numbOfPage; p++)
     {
-        int n=0;
+        int n=99;
         if(pageType[p]=="1") n=1;
         if(pageType[p]=="2") n=2;
         if(pageType[p]=="3") n=3;
@@ -355,6 +355,7 @@ void OBP60Task(void *param){
         if(pageType[p]=="Wind Rose") n=10;
         if(pageType[p]=="Timer") n=11;
         if(pageType[p]=="TWD Shift") n=12;
+        if(pageType[p]=="dummy") n=99; // insert dummy page if no pages are selected
         if(n!=0)
         {
            pl.insertLast(n);

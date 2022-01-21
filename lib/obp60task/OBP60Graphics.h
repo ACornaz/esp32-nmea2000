@@ -20,6 +20,7 @@
 #include "OBP60WindRose.h"
 #include "OBP60Timer.h"
 #include "OBP60TWD.h"
+#include "OBP60Dummy.h"
 
 //forward
 class TopMargin;

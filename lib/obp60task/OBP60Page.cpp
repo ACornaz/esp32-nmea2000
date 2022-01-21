@@ -400,49 +400,99 @@ String unit(String pageTile)  // unit doppelt definiert auch in Data !!!!!!!
 void makePageConsistent()
 {
    int np=0;  // number of Page
-   int tile=0; // number of active tiles of page i 
-   for(int i=1; i<=6; i++)
+   int tile=0; // number of active tiles of page i
+   int i=1;  
+   for(int p=1; p<=6; p++)
    {  
-      // graphic page
-      if(pageType[i] != "off"||
-         pageType[i] != "0"||
-         pageType[i] != "1"||
-         pageType[i] != "2"||
-         pageType[i] != "3"||
-         pageType[i] != "4") 
+      bool pageEmpty = true;
+      for(int j=1;j<=4;j++)
+      {
+         if(pageTile[i][j]=="Off") 
+            pageEmpty= pageEmpty && true;
+         else
+            pageEmpty= pageEmpty && false;
+      }
+      if(pageEmpty == true)
+      { 
+         if( pageType[i] == "1"  ||
+             pageType[i] == "2"  ||
+             pageType[i] == "3"  ||
+             pageType[i] == "4"  ) pageType[i] = "Off";
+      }
+      if(pageType[i] == "Off")
+      {
+         for(int j=i;j<6;j++)
+         {
+            pageType[j]=pageType[j+1];
+            for(int k=1;k<=4;k++)
+            {
+               pageTile[j][k]=pageTile[j+1][k];
+            }
+         }
+         pageType[6]="Off";
+         pageTile[6][1]="Off";
+         pageTile[6][2]="Off";
+         pageTile[6][3]="Off";
+         pageTile[6][4]="Off";
+      }
+      else
       {
          np++;
+         i++;
       }
-      else // normal page with 1 to 4 tiles
+   }
+   for(int i=1;i<=np;i++)
+   {  
+      if(pageType[i]=="1" ||
+         pageType[i]=="2" ||
+         pageType[i]=="3" ||
+         pageType[i]=="4" )
       {
-        tile=0;
-        for(int j=1;j<=4;j++)
-        {
-           if(pageTile[i][j] != "off") tile++;
-        }
-        switch (tile)
-        {
-        case 0:
-           pageType[i] = "off";
-           break;
-        case 1:
-           pageType[i] = "1";
-           np++;
-           break;
-         case 2:
-           pageType[i] = "2";
-           np++;
-           break;
-         case 3:
-           pageType[i] = "3";
-           np++;
-           break;
-         case 4:
-           pageType[i] = "4";
-           np++;
-           break;
-        }
-      }   
+         tile=0;     
+         int k=1;
+         for(int j=1;j<=4;j++)
+         {
+            if(pageTile[i][k] == "Off") 
+            {   
+               for(int m=k;m<4;m++)
+               {
+                  pageTile[i][m] = pageTile[i][m+1];
+               }
+               pageTile[i][4]="Off";
+            }
+            else{
+               tile++;
+               k++;
+            }
+         }
+
+         if(pageType[i]=="Off") tile=0;
+        
+         switch (tile)
+         {
+            case 0:
+               pageType[i] = "Off";
+               break;
+            case 1:
+               pageType[i] = "1";
+               break;
+            case 2:
+               pageType[i] = "2";
+               break;
+            case 3:
+               pageType[i] = "3";
+               break;
+            case 4:
+               pageType[i] = "4";
+               break;
+         }
+      }
+   }
+
+   if(np==0) // no activated pages in wifi, config.json 
+   {
+      np=1;
+      pageType[1] = "dummy";
    }
    numbOfPage=np; 
 }
