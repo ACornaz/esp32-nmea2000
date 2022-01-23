@@ -7,7 +7,7 @@ void printTimer(busData *bInfo)  // Start Timer
   unsigned long timeBegin=millis();
   display.fillRect(0, 0, GxEPD_WIDTH, GxEPD_HEIGHT, GxEPD_WHITE);   // Draw white sreen
   topMargin.print(bInfo);
-  buttomStatusLine();
+  buttomStatusLine("","","");
   
     display.setFont(&Ubuntu_Bold20pt7b);
     display.setTextColor(GxEPD_BLACK);

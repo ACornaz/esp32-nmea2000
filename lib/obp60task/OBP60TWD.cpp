@@ -5,7 +5,7 @@ void printTWD(busData *bInfo)  // Graphic Page for TWD last 10 min
 {   // test phase only dummy array
   display.fillRect(0, 0, GxEPD_WIDTH, GxEPD_HEIGHT, GxEPD_WHITE);   // Draw white sreen
   topMargin.print(bInfo);
-  buttomStatusLine();
+  buttomStatusLine("","","");
     // title
     display.setFont(&Ubuntu_Bold20pt7b);
     display.setTextColor(GxEPD_BLACK);

@@ -16,6 +16,7 @@ pageNode* pageList::createNode(int numbofTiles)
    temp->next = nullptr;
    temp->prev = nullptr;
    temp->subList  = new(subPageList);
+   temp->keyAction="0";
    return temp;
 }
 

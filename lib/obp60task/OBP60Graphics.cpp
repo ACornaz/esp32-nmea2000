@@ -150,7 +150,7 @@ void pageUpdate(busData *bInfo,bool firstView)
       printTWD(bInfo);
       break; 
     case 99:
-      printDummy(bInfo); 
+      printDummy(bInfo,&actualPage->keyAction); 
       break;
     default:
     ;        
@@ -170,24 +170,41 @@ void pageUpdate(busData *bInfo,bool firstView)
   }
 }
 
-void buttomStatusLine()
+void buttomStatusLine(String s2, String s3, String s4)
 {
     // Key Layout
   display.setFont(&Ubuntu_Bold8pt7b);
   display.setTextColor(GxEPD_BLACK);
-  display.setCursor(0, 290);
-  display.print(" [  <  ]");
-  display.setCursor(290, 290);
-  display.print("[  >  ]");
-  display.setCursor(343, 290);
-  display.print("[ILUM]");
+  
+  int x0=17;
+  int dx=72;
+
+  //display.setCursor(20, 290);
+  //display.print("[  <  ]");
+  // display.setCursor(290, 290);
+  //display.print("[ > ]");
+  // display.setCursor(343, 290);
+  //display.print("[ILUM]");
+
+//Key 1
+  drawCentreString("[ < ]", x0, 290);
+//Key 2
+  drawCentreString(s2, x0+1*dx, 290);
+//Key 3
+  drawCentreString(s3, x0+2*dx, 290);
+//Key 4
+  drawCentreString(s4, x0+3*dx, 290);
+//Key 5
+  drawCentreString("[ > ]", x0+4*dx, 290);
+//Key 6
+  drawCentreString("ILUM", x0+5*dx, 290);
 }
 
 void print1tile(busData *bInfo)  // page with 1 tile
 {
   display.fillRect(0, 0, GxEPD_WIDTH, GxEPD_HEIGHT, GxEPD_WHITE);   // Draw white sreen
   topMargin.print(bInfo);
-  buttomStatusLine();
+  buttomStatusLine("","","");
   for(int i=0;i<actualPage->numbTiles;i++)
   {
     // Title
@@ -236,7 +253,7 @@ void print2tiles(busData *bInfo)  // page with 2 tiles
 {
   display.fillRect(0, 0, GxEPD_WIDTH, GxEPD_HEIGHT, GxEPD_WHITE);   // Draw white sreen
   topMargin.print(bInfo);
-  buttomStatusLine();
+  buttomStatusLine("","","");
   display.fillRect(0, 145, 400, 3, GxEPD_BLACK);   // Horizontal line 3 pix
   for(int i=0;i<actualPage->numbTiles;i++)
   {
@@ -288,7 +305,7 @@ void print3tiles(busData *bInfo)
 {
   display.fillRect(0, 0, GxEPD_WIDTH, GxEPD_HEIGHT, GxEPD_WHITE);   // Draw white sreen
   topMargin.print(bInfo);
-  buttomStatusLine();
+  buttomStatusLine("","","");
   display.fillRect(0, 104, 400, 3, GxEPD_BLACK);   // Horizontal line 3 pix
   display.fillRect(0, 189, 400, 3, GxEPD_BLACK);   // Horizontal line 3 pix
   for(int i=0;i<actualPage->numbTiles;i++)
@@ -330,7 +347,7 @@ void print4tiles(busData *bInfo)
 {
   display.fillRect(0, 0, GxEPD_WIDTH, GxEPD_HEIGHT, GxEPD_WHITE);   // Draw white sreen
   topMargin.print(bInfo);
-  buttomStatusLine();
+  buttomStatusLine("","","");
   display.fillRect(0, 145, 400, 3, GxEPD_BLACK);   // Horizontal line 3 pix
   display.fillRect(198, 20, 3, 260, GxEPD_BLACK);   // Vertical line 3 pix
   for(int i=0;i<actualPage->numbTiles;i+=2)

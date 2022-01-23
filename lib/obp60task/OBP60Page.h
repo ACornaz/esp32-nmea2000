@@ -25,7 +25,8 @@ struct pageNode  // every pageNode has its own Node of subPage (=tiles)
         struct pageNode *next;
         struct pageNode *prev;
         struct subPageNode *sub;
-        subPageList *subList;  
+        subPageList *subList; 
+        String keyAction; 
 };
 
 class pageList

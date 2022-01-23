@@ -513,7 +513,7 @@ void OBP60Task(void *param){
                     keystatus = "0";
                 }
             }
-            // Change page number
+            // Change page number "5s"
             if(keystatus == "5s"){
                 actualPage=actualPage->next;  //Adrien
                 actualTile = actualPage->sub; //Adrien                
@@ -524,6 +524,7 @@ void OBP60Task(void *param){
                 first_view = true;
                 keystatus = "0";
             }
+            // Change page number "1s"
             if(keystatus == "1s"){
                 actualPage=actualPage->prev; //Adrien
                 actualTile = actualPage->sub;//Adrien 
@@ -534,6 +535,12 @@ void OBP60Task(void *param){
                 first_view = true;
                 keystatus = "0";
             }
+            // Page specific action "2s"
+            if(keystatus == "2s"){
+                actualPage->keyAction="2s";
+                first_view = true;
+                keystatus = "0";
+            }            
         }
 
         // Subtask all 3000ms

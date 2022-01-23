@@ -22,5 +22,5 @@
 
 extern GxGDEW042T2 display;
 
-void printDummy(busData *bInfo);  // Start Timer
+void printDummy(busData *bInfo, String *kAction);  // Start Timer
 #endif
