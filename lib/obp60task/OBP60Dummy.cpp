@@ -16,4 +16,11 @@ void printDummy(busData *bInfo, String *kAction)  // Dummy Page displayed if no 
 		display.update();
 		*kAction="0";
 	}
+	if(*kAction=="3s"){
+		*kAction="0";
+	}
+	if(*kAction=="4s"){
+		display.update();
+		*kAction="0";
+	}
 }

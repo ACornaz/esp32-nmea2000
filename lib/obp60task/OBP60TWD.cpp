@@ -1,11 +1,21 @@
 #include "OBP60TWD.h"
 
 
-void printTWD(busData *bInfo)  // Graphic Page for TWD last 10 min
+void printTWD(busData *bInfo, String *kAction)  // Graphic Page for TWD last 10 min
 {   // test phase only dummy array
-  display.fillRect(0, 0, GxEPD_WIDTH, GxEPD_HEIGHT, GxEPD_WHITE);   // Draw white sreen
-  topMargin.print(bInfo);
-  buttomStatusLine("","","");
+  	display.fillRect(0, 0, GxEPD_WIDTH, GxEPD_HEIGHT, GxEPD_WHITE);   // Draw white sreen
+  	topMargin.print(bInfo);
+  	if(*kAction=="2s"){
+		display.update();
+		*kAction="0";
+	}
+	if(*kAction=="3s"){
+		*kAction="0";
+	}
+	if(*kAction=="4s"){
+		display.update();
+		*kAction="0";
+	}
     // title
     display.setFont(&Ubuntu_Bold20pt7b);
     display.setTextColor(GxEPD_BLACK);

@@ -1,9 +1,22 @@
 #include "OBP60WindRose.h"
 
-void printWindRose(busData *bInfo)  // "Wind Rose" number of tiles 10 graphic page
+void printWindRose(busData *bInfo, String *kAction)  // "Wind Rose" number of tiles 10 graphic page
 {   
 	static int alpha=0;
   alpha=alpha+2;
+  
+  if(*kAction=="2s"){
+		display.update();
+		*kAction="0";
+	}
+	if(*kAction=="3s"){
+		*kAction="0";
+	}
+	if(*kAction=="4s"){
+		display.update();
+		*kAction="0";
+	}
+
   // Apparent Wind Angle diplayed in graphic windrose
   printWindCircle(bInfo, bInfo->AWA.fvalue);
 

@@ -22,5 +22,5 @@
 extern unsigned long timeBefore, timeBefore1, timeAfter;  // for debbuging
 extern GxGDEW042T2 display;
 
-void printTimer(busData *bInfo);  // Start Timer
+void printTimer(busData *bInfo, String *kAction);  // Start Timer
 #endif

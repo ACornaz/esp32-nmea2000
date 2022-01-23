@@ -141,13 +141,13 @@ void pageUpdate(busData *bInfo,bool firstView)
       print4tiles(bInfo);
       break;  
     case 10:
-      printWindRose(bInfo);
+      printWindRose(bInfo,&actualPage->keyAction);
       break;
     case 11:
-      printTimer(bInfo);
+      printTimer(bInfo,&actualPage->keyAction);
       break;
     case 12:
-      printTWD(bInfo);
+      printTWD(bInfo,&actualPage->keyAction);
       break; 
     case 99:
       printDummy(bInfo,&actualPage->keyAction); 

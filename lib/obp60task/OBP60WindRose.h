@@ -24,7 +24,7 @@ extern bool heartbeat;
 extern unsigned long timeBefore, timeBefore1, timeAfter;  // for debbuging
 extern GxGDEW042T2 display;
 
-void printWindRose(busData *bInfo);  // "Wind Rose" number of tiles 10 graphic page
+void printWindRose(busData *bInfo, String *kAction);  // "Wind Rose" number of tiles 10 graphic page
 void drawCenterString(const char *buf, int x, int y);
 void drawCentreString(const String &buf, int x, int y);
 void printWindCornerInfo(busData *bInfo,int i);

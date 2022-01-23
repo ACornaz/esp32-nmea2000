@@ -22,5 +22,5 @@
 extern unsigned long timeBefore, timeBefore1, timeAfter;  // for debbuging
 extern GxGDEW042T2 display;
 
-void printTWD(busData *bInfo);  // TWD Graphic Page
+void printTWD(busData *bInfo, String *kAction);  // TWD Graphic Page
 #endif
