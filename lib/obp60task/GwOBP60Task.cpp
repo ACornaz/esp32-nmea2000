@@ -540,7 +540,19 @@ void OBP60Task(void *param){
                 actualPage->keyAction="2s";
                 first_view = true;
                 keystatus = "0";
-            }            
+            }    
+            // Page specific action "3s"
+            if(keystatus == "3s"){
+                actualPage->keyAction="3s";
+                first_view = true;
+                keystatus = "0";
+            }      
+            // Page specific action "4s"
+            if(keystatus == "4s"){
+                actualPage->keyAction="4s";
+                first_view = true;
+                keystatus = "0";
+            }                  
         }
 
         // Subtask all 3000ms

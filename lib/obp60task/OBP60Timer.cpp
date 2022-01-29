@@ -26,13 +26,16 @@ void printTimer(busData *bInfo, String *kAction)  // Start Timer
 		  *kAction="0";
 	  }
   }
+  long t;
+  t = (long)millis();
   if(tStatus==started){
     buttomStatusLine("stop","synchr","");
     if(*kAction=="2s"){
       tStatus=stopped;
 		  *kAction="0";
 	  }
-	  if(*kAction=="3s"){
+	  if(*kAction=="3s"){// synchronise the timer by rounding to the nearest minute 
+      time0=t+((time0-t+30000)/60000)*60000;
 		  *kAction="0";
 	  }
 	  if(*kAction=="4s"){
@@ -46,18 +49,18 @@ void printTimer(busData *bInfo, String *kAction)  // Start Timer
     display.setCursor(20, 80);
     display.print("Regatta Timer");
   
-    // measurements
+    // time
     display.setFont(&DSEG7Classic_BoldItalic42pt7b);
     display.setCursor(20, 200);
     long sec;
     long min;
     long hour;
-    long t;
-    if(tStatus==started)
-        t=(long)(millis());
+    //if(tStatus==started)
+    //    t=(long)(millis());
     if(tStatus==stopped)
         t=time0-startMinutes*60000;
     long dt=(time0-t);
+    if(dt<0)dt=-dt;
     hour = dt/(1000*3600);
     dt=dt-hour*1000*3600;
     min = dt/(1000*60);
@@ -69,7 +72,7 @@ void printTimer(busData *bInfo, String *kAction)  // Start Timer
     }
     if(hour>0 && hour<10)
     {
-      display.print(" ");
+      moveCursor("8");
       display.print(hour);
       display.print(":");
     }
@@ -81,7 +84,7 @@ void printTimer(busData *bInfo, String *kAction)  // Start Timer
 
     if(min>=0 && min<10)
     {
-      display.print(" ");
+      moveCursor("8");
       display.print(min);
       display.print(":");
     }
@@ -93,7 +96,7 @@ void printTimer(busData *bInfo, String *kAction)  // Start Timer
     
     if(sec>=0 && sec<10)
     {
-      display.print("0");
+      display.print("0"); 
       display.print(sec);
     }
     if(sec>=10)
@@ -105,5 +108,5 @@ void printTimer(busData *bInfo, String *kAction)  // Start Timer
     display.setFont(&Ubuntu_Bold20pt7b);
     display.setTextColor(GxEPD_BLACK);
     display.setCursor(300, 80);
-   // display.print(timeAfter-timeBefore);
+    display.print(timeAfter-timeBefore);
 }

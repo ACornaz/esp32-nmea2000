@@ -27,6 +27,31 @@ void printWindRose(busData *bInfo, String *kAction)  // "Wind Rose" number of ti
     display.print(timeAfter-timeBefore);
 }
 
+// now not working, in construction
+void moveCursor(String buf)  // move cursor forward equal to the width of char + char interspace
+{
+  int16_t x,y;
+  x=display.getCursorX();
+  y=display.getCursorY();
+  int16_t x1, y1;
+  uint16_t w1, w2, h;
+  display.getTextBounds(buf+buf, x, y, &x1, &y1, &w1, &h); //calc width of string buf+interspace+buf
+  display.getTextBounds(buf, x, y, &x1, &y1, &w2, &h); //calc width of string buf without interspace
+  display.setCursor(x+w1-w2, y); // move cursor in x, dist= buf+interspace
+
+
+
+  // charBounds( unsigned char  	c,The ASCII character in question
+	//	int16_t *  	x,Pointer to x location of character. Value is modified by this function to advance to next character.
+	//	int16_t *  	y,Pointer to y location of character. Value is modified by this function to advance to next character.
+	//	int16_t *  	minx,Pointer to minimum X coordinate, passed in to AND returned by this function – this is used to incrementally build a bounding rectangle for a string.
+	//	int16_t *  	miny,Pointer to minimum Y coord, passed in AND returned.
+	//	int16_t *  	maxx,Pointer to maximum X coord, passed in AND returned.
+	//	int16_t *  	maxy )Pointer to maximum Y coord, passed in AND returned. 
+	 	
+
+}
+
 void drawCenterString(const char *buf, int x, int y)
 {
     int16_t x1, y1;

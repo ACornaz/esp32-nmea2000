@@ -18,6 +18,7 @@
 #include "OBP60Hardware.h"
 #include "OBP60Graphics.h"
 #include "OBP60Data1.h"
+#include "OBP60WindRose.h"
 
 extern unsigned long timeBefore, timeBefore1, timeAfter;  // for debbuging
 extern GxGDEW042T2 display;
